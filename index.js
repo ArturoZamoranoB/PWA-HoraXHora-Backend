@@ -5,18 +5,10 @@ const cors = require("cors");
 const { Pool } = require("pg");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const pool = require("./db.js");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-
-// Conexión a PostgreSQL (usa DATABASE_URL en tu .env)
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    require: true,
-    rejectUnauthorized: false,
-  },
-});
 
 
 app.use(cors());
