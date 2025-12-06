@@ -197,6 +197,25 @@ app.get("/api/solicitudes/aceptadas", authMiddleware, async (req, res) => {
   }
 });
 
+app.post("/api/solicitudes", authMiddleware, async (req, res) => {
+  try {
+    const { titulo, descripcion, alumno, fecha } = req.body;
+
+    const result = await pool.query(
+      `INSERT INTO solicitudes (titulo, descripcion, alumno, fecha, estado)
+       VALUES ($1, $2, $3, $4, 'PENDIENTE')
+       RETURNING *`,
+      [titulo, descripcion, alumno, fecha]
+    );
+
+    res.json({ ok: true, solicitud: result.rows[0] });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error al crear solicitud" });
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
