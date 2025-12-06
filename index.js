@@ -197,26 +197,39 @@ app.get("/api/solicitudes/aceptadas", authMiddleware, async (req, res) => {
   }
 });
 
+// Crear solicitud (funciona online y con sync)
 app.post("/api/solicitudes", authMiddleware, async (req, res) => {
   try {
     const { titulo, descripcion, alumno, fecha } = req.body;
 
+    // Validación básica obligatoria
+    if (!titulo || !alumno) {
+      return res.status(400).json({
+        ok: false,
+        error: "Faltan datos obligatorios: título y alumno son requeridos."
+      });
+    }
+
+    // Si no viene fecha, la dejamos en null (DB la acepta)
+    const fechaFinal = fecha && fecha.length > 0 ? fecha : null;
+
     const result = await pool.query(
       `INSERT INTO solicitudes (titulo, descripcion, alumno, fecha, estado)
        VALUES ($1, $2, $3, $4, 'PENDIENTE')
-       RETURNING *`,
-      [titulo, descripcion, alumno, fecha]
+       RETURNING id, titulo, descripcion, alumno, fecha, estado`,
+      [titulo, descripcion || "", alumno, fechaFinal]
     );
 
-    res.json({ ok: true, solicitud: result.rows[0] });
+    return res.status(201).json({
+      ok: true,
+      solicitud: result.rows[0]
+    });
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Error al crear solicitud" });
+    console.error("❌ Error creando solicitud:", err);
+    return res.status(500).json({
+      ok: false,
+      error: "Error interno al crear solicitud"
+    });
   }
-});
-
-
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
