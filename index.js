@@ -1,4 +1,3 @@
-// server.js
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -14,7 +13,6 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 
-// 👉 Función para crear token JWT
 function crearToken(user) {
   return jwt.sign(
     {
@@ -26,7 +24,6 @@ function crearToken(user) {
   );
 }
 
-// 👉 Middleware para proteger rutas
 function authMiddleware(req, res, next) {
   const authHeader = req.headers["authorization"];
   if (!authHeader) return res.status(401).json({ error: "No se proporcionó token" });
@@ -43,16 +40,11 @@ function authMiddleware(req, res, next) {
   }
 }
 
-/* -------------------------
-   RUTAS PÚBLICAS
-   ------------------------- */
-
-// Ruta de prueba
 app.get("/api/health", (req, res) => {
   res.json({ ok: true, message: "Servidor funcionando con tokens 🚀" });
 });
 
-// Registro -> devuelve token
+
 app.post("/api/auth/register", async (req, res) => {
   try {
     const { nombre, email, password } = req.body;
@@ -77,7 +69,6 @@ app.post("/api/auth/register", async (req, res) => {
   }
 });
 
-// Login -> devuelve token
 app.post("/api/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -100,9 +91,7 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-/* -------------------------
-   RUTAS PROTEGIDAS (authMiddleware)
-   ------------------------- */
+
 
 // Perfil (ejemplo)
 app.get("/api/profile", authMiddleware, async (req, res) => {
@@ -117,7 +106,7 @@ app.get("/api/profile", authMiddleware, async (req, res) => {
   }
 });
 
-// Actualizar perfil (name, email)
+
 app.put("/api/profile", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
@@ -135,7 +124,7 @@ app.put("/api/profile", authMiddleware, async (req, res) => {
   }
 });
 
-// Obtener solicitudes pendientes (actividades)
+
 app.get("/api/solicitudes/pendientes", authMiddleware, async (req, res) => {
   try {
     const result = await pool.query(
@@ -151,7 +140,7 @@ app.get("/api/solicitudes/pendientes", authMiddleware, async (req, res) => {
   }
 });
 
-// Aceptar una solicitud (la toma el usuario logueado)
+
 app.post("/api/solicitudes/:id/aceptar", authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
@@ -179,7 +168,7 @@ app.post("/api/solicitudes/:id/aceptar", authMiddleware, async (req, res) => {
   }
 });
 
-// Obtener solicitudes aceptadas por el usuario (dashboard)
+
 app.get("/api/solicitudes/aceptadas", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
@@ -197,7 +186,7 @@ app.get("/api/solicitudes/aceptadas", authMiddleware, async (req, res) => {
   }
 });
 
-// Crear una nueva solicitud
+
 app.post("/api/solicitudes", authMiddleware, async (req, res) => {
   try {
     const { titulo, descripcion, alumno, fecha } = req.body;
