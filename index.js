@@ -197,6 +197,43 @@ app.get("/api/solicitudes/aceptadas", authMiddleware, async (req, res) => {
   }
 });
 
+// Crear una nueva solicitud (compatible con offline-sync)
+app.post("/api/solicitudes", authMiddleware, async (req, res) => {
+  try {
+    const { titulo, descripcion, alumno, fecha } = req.body;
+
+    // Validación básica para que no truene el INSERT
+    if (!titulo || !alumno) {
+      return res.status(400).json({
+        ok: false,
+        error: "Faltan datos obligatorios: 'titulo' y 'alumno'."
+      });
+    }
+
+    // Permitir fecha vacía → pasa como NULL a PostgreSQL
+    const fechaFinal = fecha && fecha.length > 0 ? fecha : null;
+
+    const result = await pool.query(
+      `INSERT INTO solicitudes (titulo, descripcion, alumno, fecha, estado)
+       VALUES ($1, $2, $3, $4, 'PENDIENTE')
+       RETURNING id, titulo, descripcion, alumno, fecha, estado`,
+      [titulo, descripcion || "", alumno, fechaFinal]
+    );
+
+    return res.status(201).json({
+      ok: true,
+      solicitud: result.rows[0]
+    });
+
+  } catch (err) {
+    console.error("❌ Error al crear solicitud:", err);
+    return res.status(500).json({
+      ok: false,
+      error: "Error interno al crear la solicitud."
+    });
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
