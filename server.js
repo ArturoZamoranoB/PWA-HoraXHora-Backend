@@ -158,7 +158,7 @@ app.put("/api/profile", authMiddleware, async (req, res) => {
   }
 });
 
-/* 🧾 Solicitudes pendientes */
+/*Solicitudes pendientes */
 app.get("/api/solicitudes/pendientes", authMiddleware, async (req, res) => {
   try {
     const result = await pool.query(
@@ -175,7 +175,7 @@ app.get("/api/solicitudes/pendientes", authMiddleware, async (req, res) => {
   }
 });
 
-/* 🟢 Aceptar solicitud */
+/* Aceptar solicitud */
 app.post("/api/solicitudes/:id/aceptar", authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
@@ -207,7 +207,7 @@ app.post("/api/solicitudes/:id/aceptar", authMiddleware, async (req, res) => {
   }
 });
 
-/* 🟣 Solicitudes aceptadas */
+/* Solicitudes aceptadas */
 app.get("/api/solicitudes/aceptadas", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
@@ -227,7 +227,7 @@ app.get("/api/solicitudes/aceptadas", authMiddleware, async (req, res) => {
   }
 });
 
-/* 🟢 Crear solicitud */
+/* Crear solicitud */
 app.post("/api/solicitudes", authMiddleware, async (req, res) => {
   try {
     const { titulo, descripcion, alumno, fecha } = req.body;
@@ -251,7 +251,7 @@ app.post("/api/solicitudes", authMiddleware, async (req, res) => {
       solicitud: result.rows[0],
     });
   } catch (err) {
-    console.error("❌ Error al crear solicitud:", err);
+    console.error("Error al crear solicitud:", err);
     res.status(500).json({
       ok: false,
       error: "Error interno al crear solicitud",
@@ -259,7 +259,8 @@ app.post("/api/solicitudes", authMiddleware, async (req, res) => {
   }
 });
 
-console.log(usuario.nombre);
+/*console.log(usuario.nombre); */
 
 /* Prueba */
+
 module.exports = app;
