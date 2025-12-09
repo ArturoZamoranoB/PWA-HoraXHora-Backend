@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 
+
 /* 🔐 Crear token JWT */
 function crearToken(user) {
   return jwt.sign(
