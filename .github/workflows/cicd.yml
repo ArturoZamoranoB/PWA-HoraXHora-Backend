@@ -14,7 +14,8 @@ jobs:
         with:
           node-version: "18"
       - run: npm install
-      - run: npm test
+      - run: node node_modules/jest/bin/jest.js --runInBand
+
 
   build-and-push:
     needs: test
