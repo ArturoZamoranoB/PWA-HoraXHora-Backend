@@ -1,3 +1,3 @@
-test("index.js carga sin errores de sintaxis", () => {
-  expect(() => require("../index.js")).not.toThrow();
+test("server carga sin errores", () => {
+  expect(() => require("../server")).not.toThrow();
 });
