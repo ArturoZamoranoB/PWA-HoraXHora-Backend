@@ -259,7 +259,10 @@ app.post("/api/solicitudes", authMiddleware, async (req, res) => {
   }
 });
 
-/* 🚀 Iniciar servidor */
+/* Iniciar servidor */
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
+
+
+/* XD */
