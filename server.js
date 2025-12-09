@@ -259,5 +259,5 @@ app.post("/api/solicitudes", authMiddleware, async (req, res) => {
   }
 });
 
-/* bien hecho */
+/* bien hecho 2*/
 module.exports = app;
