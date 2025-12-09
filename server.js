@@ -259,5 +259,7 @@ app.post("/api/solicitudes", authMiddleware, async (req, res) => {
   }
 });
 
-/* bien hecho 2*/
+/*console.log(usuario.nombre); */
+
+/* Prueba */
 module.exports = app;
