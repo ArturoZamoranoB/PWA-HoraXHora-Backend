@@ -258,6 +258,6 @@ app.post("/api/solicitudes", authMiddleware, async (req, res) => {
     });
   }
 });
-console.log(usuario.nombre);
 
+/* bien hecho */
 module.exports = app;
